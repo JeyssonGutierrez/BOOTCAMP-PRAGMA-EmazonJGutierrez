@@ -9,10 +9,13 @@ package com.bootcamp_2024_1.emazon.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 //Anotaciones de lombok para generar Contructor, Getters y Setters
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryResponseDTO {

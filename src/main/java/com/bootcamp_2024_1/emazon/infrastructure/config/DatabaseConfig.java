@@ -1,5 +1,6 @@
 package com.bootcamp_2024_1.emazon.infrastructure.config;
 
+import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -13,10 +14,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+
 @Configuration
 @EnableJpaRepositories(basePackages = "com.bootcamp_2024_1.emazon.infrastructure.repository")
 public class DatabaseConfig {
 
+  @Setter
   @Autowired
   private Environment env;
 

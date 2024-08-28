@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-class CategoryUseCase implements CategoryServicePort {
+public class CategoryUseCase implements CategoryServicePort {
 
   private final CategoryPersistencePort categoryPersistencePort;
 
