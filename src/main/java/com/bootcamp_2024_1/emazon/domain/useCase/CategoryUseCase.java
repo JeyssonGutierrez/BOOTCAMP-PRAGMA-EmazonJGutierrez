@@ -2,12 +2,9 @@ package com.bootcamp_2024_1.emazon.domain.useCase;
 
 
 import com.bootcamp_2024_1.emazon.domain.api.CategoryServicePort;
-import com.bootcamp_2024_1.emazon.domain.exceptions.GlobalException;
 import com.bootcamp_2024_1.emazon.domain.exceptions.Util;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.domain.spi.CategoryPersistencePort;
-import java.util.List;
-import java.util.Scanner;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -46,17 +43,12 @@ public class CategoryUseCase implements CategoryServicePort {
       Util.throwException(badRequestCode, "El campo descripción no puede superar 90 caracteres.");
     }
 
-    return categoryPersistencePort.save(domainCategory);
+    return categoryPersistencePort.saveCategory(domainCategory);
   }
 
   @Override
-  public List<DomainCategory> findAll() {
-    return categoryPersistencePort.findAll();
-  }
-
-  @Override
-  public List<DomainCategory> getAllCategory() {
-    return categoryPersistencePort.findAll(); // Usa el método findAll para obtener todas las categorías
+  public DomainCategory findByName(String name) {
+    return null;
   }
 
   @Override

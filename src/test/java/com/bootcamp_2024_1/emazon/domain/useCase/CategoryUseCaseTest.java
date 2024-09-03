@@ -1,9 +1,22 @@
 package com.bootcamp_2024_1.emazon.domain.useCase;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
+import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
+import com.bootcamp_2024_1.emazon.application.handler.CategoryHandlerImpl;
+import com.bootcamp_2024_1.emazon.application.mapper.CategoryResponseMapper;
+import com.bootcamp_2024_1.emazon.domain.api.CategoryServicePort;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.domain.spi.CategoryPersistencePort;
 import com.bootcamp_2024_1.emazon.TestDataFactory;
 import com.bootcamp_2024_1.emazon.domain.exceptions.GlobalException;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,25 +31,34 @@ import java.util.List;
 public class CategoryUseCaseTest {
 
   @Mock
+  private CategoryServicePort categoryServicePort;
+
+  @Mock
   CategoryPersistencePort categoryPersistencePort;
+
+  @Mock
+  private CategoryResponseMapper categoryResponseMapper;
 
   @InjectMocks
   CategoryUseCase useCase;
+
+  @InjectMocks
+  private CategoryHandlerImpl categoryHandler;
 
   @Test
   void saveCategoryTest() throws IllegalAccessException {
     DomainCategory category = TestDataFactory.buildDomainCategory();
 
     // Configura el mock para que devuelva la categoría cuando se guarde
-    Mockito.when(categoryPersistencePort.save(Mockito.any(DomainCategory.class)))
+    when(categoryPersistencePort.saveCategory(any(DomainCategory.class)))
         .thenReturn(category);
 
     DomainCategory result = useCase.saveCategory(category);
 
     // Verifica que la categoría se haya guardado correctamente
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals("Pintura", result.getName());
-    Assertions.assertEquals("test Pintura", result.getDescription());
+    assertNotNull(result);
+    assertEquals("Pintura", result.getName());
+    assertEquals("test Pintura", result.getDescription());
   }
 
   @Test
@@ -44,7 +66,7 @@ public class CategoryUseCaseTest {
     DomainCategory category = TestDataFactory.buildDomainCategory();
 
     // Simula que la categoría ya existe
-    Mockito.when(categoryPersistencePort.findByName("Pintura"))
+    when(categoryPersistencePort.findByName("Pintura"))
         .thenReturn(category);
 
     // Verifica que se lance una excepción al intentar guardar una categoría existente
@@ -53,45 +75,12 @@ public class CategoryUseCaseTest {
     });
   }
 
-  @Test
-  void findAllCategoriesTest() {
-    List<DomainCategory> categories = TestDataFactory.buildCategoryEntityList().stream()
-        .map(entity -> TestDataFactory.buildDomainCategory())
-        .toList();
-
-    // Simula la devolución de la lista de categorías
-    Mockito.when(categoryPersistencePort.findAll())
-        .thenReturn(categories);
-
-    List<DomainCategory> result = useCase.findAll();
-
-    // Verifica que se devuelvan todas las categorías
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(2, result.size());
-  }
-
-  @Test
-  void getAllCategoriesTest() {
-    List<DomainCategory> categories = TestDataFactory.buildCategoryEntityList().stream()
-        .map(entity -> TestDataFactory.buildDomainCategory())
-        .toList();
-
-    // Simula la devolución de la lista de categorías
-    Mockito.when(categoryPersistencePort.findAll())
-        .thenReturn(categories);
-
-    List<DomainCategory> result = useCase.getAllCategory();
-
-    // Verifica que se devuelvan todas las categorías
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(2, result.size());
-  }
 
   @Test
   void shouldThrowExceptionWhenCategoryNameExists() {
     // Arrange
     DomainCategory category = TestDataFactory.buildDomainCategory();
-    Mockito.when(categoryPersistencePort.findByName(Mockito.anyString()))
+    when(categoryPersistencePort.findByName(Mockito.anyString()))
         .thenReturn(category);
 
     // Act & Assert
@@ -133,15 +122,18 @@ public class CategoryUseCaseTest {
   @Test
   void shouldSaveCategorySuccessfully() throws IllegalAccessException {
     DomainCategory category = TestDataFactory.buildDomainCategory();
-    Mockito.when(categoryPersistencePort.findByName(Mockito.anyString()))
+    when(categoryPersistencePort.findByName(Mockito.anyString()))
         .thenReturn(null);
-    Mockito.when(categoryPersistencePort.save(Mockito.any(DomainCategory.class)))
+    when(categoryPersistencePort.saveCategory(any(DomainCategory.class)))
         .thenReturn(category);
 
     DomainCategory result = useCase.saveCategory(category);
 
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(category.getName(), result.getName());
-    Assertions.assertEquals(category.getDescription(), result.getDescription());
+    assertNotNull(result);
+    assertEquals(category.getName(), result.getName());
+    assertEquals(category.getDescription(), result.getDescription());
   }
+
 }
+
+

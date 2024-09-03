@@ -5,41 +5,48 @@ import com.bootcamp_2024_1.emazon.infrastructure.entity.CategoryEntity;
 import com.bootcamp_2024_1.emazon.domain.spi.CategoryPersistencePort;
 import com.bootcamp_2024_1.emazon.infrastructure.repository.CategoryJpaRepository;
 import com.bootcamp_2024_1.emazon.infrastructure.mapper.CategoryEntityMapper;
+
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Sort;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@AllArgsConstructor
 @Repository
 public class CategoryRepositoryImpl implements CategoryPersistencePort {
 
-  private final CategoryJpaRepository jpaRepository;
-  private final CategoryEntityMapper mapper;
+  private final CategoryJpaRepository categoryJpaRepository;
+  private final CategoryEntityMapper categoryEntityMapper;
 
-  public CategoryRepositoryImpl(CategoryJpaRepository jpaRepository, CategoryEntityMapper mapper) {
-    this.jpaRepository = jpaRepository;
-    this.mapper = mapper;
-  }
 
   @Override
-  public DomainCategory save(
+  public DomainCategory saveCategory(
       DomainCategory domainCategory) {
     // Convierte el modelo de dominio a entidad de infraestructura
-    CategoryEntity entity = mapper.toEntity(domainCategory);
-    CategoryEntity savedEntity = jpaRepository.save(entity);
+    CategoryEntity entity = categoryEntityMapper.toEntity(domainCategory);
+    CategoryEntity savedEntity = categoryJpaRepository.save(entity);
     // Convierte la entidad de infraestructura a modelo de dominio
-    return mapper.toDomain(savedEntity);
-  }
-
-  @Override
-  public List<DomainCategory> findAll() {
-    return jpaRepository.findAll().stream()
-        .map(mapper::toDomain) // Convierte cada entidad de infraestructura a modelo de dominio
-        .collect(Collectors.toList());
+    return categoryEntityMapper.toDomain(savedEntity);
   }
 
   @Override
   public DomainCategory findByName(String name) {
-    return mapper.toDomain(jpaRepository.findByName(name));
+    return categoryEntityMapper.toDomain(categoryJpaRepository.findByName(name));
   }
+
+  @Override
+  public Page<DomainCategory> getCategoriesList(int page, int size, String direction) {
+    Sort sort;
+    if (direction.equalsIgnoreCase("DESC")) {
+      sort = Sort.by("name").descending();
+    } else {
+      sort = Sort.by("name").ascending();
+    }
+    Pageable pageable = PageRequest.of(page, size, sort);
+    Page<CategoryEntity> categoriesPage = categoryJpaRepository.findAll(pageable);
+    return categoriesPage.map(categoryEntityMapper::toDomain);
+  }
+
 }

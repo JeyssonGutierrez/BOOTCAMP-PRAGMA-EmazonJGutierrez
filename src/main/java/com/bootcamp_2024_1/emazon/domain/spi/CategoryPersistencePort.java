@@ -1,15 +1,14 @@
 package com.bootcamp_2024_1.emazon.domain.spi;
 
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CategoryPersistencePort {
 
   // Guarda una categoría
-  DomainCategory save(DomainCategory domainCategory);
-
-  // Devuelve una lista de todas las categorías
-  List<DomainCategory> findAll();
+  DomainCategory saveCategory(DomainCategory domainCategory);
 
   DomainCategory findByName (String name);
+
+  Page<DomainCategory> getCategoriesList (int page, int size, String direction);
 }

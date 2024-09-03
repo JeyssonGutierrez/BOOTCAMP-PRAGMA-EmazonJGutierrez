@@ -18,6 +18,4 @@ public interface CategoryResponseMapper {
   // Mapea una entidad Category a un CategoryResponseDTO
   CategoryResponseDTO toDto(DomainCategory entity);
 
-  // Mapea una lista de entidades Category a una lista de CategoryResponseDTO
-  List<CategoryResponseDTO> toDtoList(List<DomainCategory> entities);
 }

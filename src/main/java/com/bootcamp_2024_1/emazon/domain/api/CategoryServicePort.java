@@ -13,11 +13,11 @@ public interface CategoryServicePort {
 
     //Operacion guardar category
   DomainCategory saveCategory(DomainCategory domainCategory) throws IllegalAccessException;
-    //Operacion mostrar todas las category
-  List<DomainCategory> getAllCategory();
 
+  DomainCategory findByName(String name);
 
-  List<DomainCategory> findAll();
 
   void saveCategoryInCategory(DomainCategory domainCategory);
+
+
 }

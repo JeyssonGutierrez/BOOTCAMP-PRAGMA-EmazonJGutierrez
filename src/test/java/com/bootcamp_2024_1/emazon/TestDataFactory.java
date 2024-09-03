@@ -4,6 +4,7 @@ import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
 import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.infrastructure.entity.CategoryEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataFactory {
@@ -33,7 +34,7 @@ public class TestDataFactory {
     );
   }
 
-  public static CategoryRequestDTO builCategoryRequestDTO() {
+  public static CategoryRequestDTO buildCategoryRequestDTO() { // Cambia de "buil" a "build"
     var category = new CategoryRequestDTO();
     category.setName("pintura");
     category.setDescription("test pintura");
@@ -50,13 +51,5 @@ public class TestDataFactory {
     return category;
   }
 
-
-  public static List<CategoryResponseDTO> buildCategoryResponseDTOList() {
-    return List.of(
-        new CategoryResponseDTO("pintura", "test pintura"),
-        new CategoryResponseDTO("accesorios", "test accesorios")
-    );
-  }
-
-
 }
+

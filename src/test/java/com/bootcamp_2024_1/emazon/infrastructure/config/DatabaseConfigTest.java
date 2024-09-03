@@ -1,6 +1,5 @@
-package com.bootcamp_2024_1.emazon.infrastructure.adapter.config;
+package com.bootcamp_2024_1.emazon.infrastructure.config;
 
-import com.bootcamp_2024_1.emazon.infrastructure.config.DatabaseConfig;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
