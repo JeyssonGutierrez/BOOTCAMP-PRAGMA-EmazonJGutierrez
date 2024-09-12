@@ -16,17 +16,17 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "categories")
-public class CategoryEntity {
+@Table(name = "brands")
+public class BrandEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id_category")
+  @Column(name = "id_brand")
   private Long id;
 
-  @Column(name = "name_category", length = 50, nullable = false)
+  @Column(name = "name_brand",length = 50,nullable = false)
   private String name;
 
-  @Column(name = "description_category", length = 90, nullable = false)
+  @Column(name = "description_brand", length = 120,nullable = false)
   private String description;
 }

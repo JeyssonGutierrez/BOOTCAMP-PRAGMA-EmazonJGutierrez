@@ -2,7 +2,8 @@ package com.bootcamp_2024_1.emazon.infrastructure.adapter.inbound;
 
 
 import static com.bootcamp_2024_1.emazon.TestDataFactory.buildCategoryRequestDTO;
-import static com.bootcamp_2024_1.emazon.TestDataFactory.builCategoryResponseDTO;
+import static com.bootcamp_2024_1.emazon.TestDataFactory.buildCategoryResponseDTO;
+
 
 import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
 import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
@@ -27,11 +28,11 @@ public class CategoryControllerTest {
   CategoryController controller;
 
   @Test
-  void createCategoryTest() throws IllegalAccessException {
+  void createCategoryTest() {
 
-    CategoryResponseDTO responseDTO = builCategoryResponseDTO();
+    CategoryResponseDTO responseDTO = buildCategoryResponseDTO();
 
-    // Cambiamos aquí para asegurar que cualquier CategoryRequestDTO sea "stubbed"
+    // Simulación del comportamiento del handler con Mockito
     Mockito.when(categoryHandler.saveCategory(Mockito.any(CategoryRequestDTO.class)))
         .thenReturn(responseDTO);
 
@@ -42,21 +43,10 @@ public class CategoryControllerTest {
     // Verificaciones
     Assertions.assertNotNull(result);
     Assertions.assertEquals(HttpStatus.CREATED, result.getStatusCode());
-    Assertions.assertEquals(builCategoryResponseDTO(), result.getBody());
+
+    // Verificamos que el cuerpo de la respuesta es igual al objeto esperado
+    Assertions.assertEquals(responseDTO, result.getBody());
   }
-
-  @Test
-  void createCategoryThrowsExceptionTest() throws IllegalAccessException {
-
-    Mockito.when(categoryHandler.saveCategory(Mockito.any(CategoryRequestDTO.class)))
-        .thenThrow(new IllegalAccessException());
-
-    ResponseEntity<CategoryResponseDTO> result = controller.createCategory(buildCategoryRequestDTO());
-
-    Assertions.assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-    Assertions.assertNull(result.getBody());
-  }
-
 
 
 }

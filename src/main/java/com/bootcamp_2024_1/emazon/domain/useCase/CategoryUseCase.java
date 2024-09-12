@@ -2,10 +2,12 @@ package com.bootcamp_2024_1.emazon.domain.useCase;
 
 
 import com.bootcamp_2024_1.emazon.domain.api.CategoryServicePort;
+import com.bootcamp_2024_1.emazon.domain.constants.DomainEnum;
 import com.bootcamp_2024_1.emazon.domain.exceptions.Util;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.domain.spi.CategoryPersistencePort;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,30 +20,15 @@ public class CategoryUseCase implements CategoryServicePort {
   }
 
   @Override
-  public DomainCategory saveCategory(DomainCategory domainCategory) throws IllegalAccessException {
-    var badRequestCode = HttpStatus.BAD_REQUEST.value();
-    // Validaciones
-    DomainCategory existingCategories = categoryPersistencePort.findByName(
-        domainCategory.getName());
+  public DomainCategory saveCategory(DomainCategory domainCategory) {
+
+    DomainCategory existingCategories = categoryPersistencePort.findByName(domainCategory.getName());
 
     if (existingCategories != null) {
-      Util.throwException(badRequestCode, String.format("El nombre %s, ya existe.",existingCategories.getName()));
+      Util.throwException(
+          String.format(DomainEnum.NAME_EXIST.getMessage(),existingCategories.getName()));
     }
-    if (domainCategory.getName() == null || domainCategory.getName().trim().isEmpty()) {
-      Util.throwException(badRequestCode, "El nombre de la categoría es obligatorio.");
-    }
-    if (domainCategory.getDescription() == null || domainCategory.getDescription().trim()
-        .isEmpty()) {
-      Util.throwException(badRequestCode, "La descripción de la Categoría es obligatoria.");
-    }
-
-    if (domainCategory.getName().length() > 50) {
-      Util.throwException(badRequestCode, "El campo Nombre no puede superar 50 caracteres.");
-    }
-
-    if (domainCategory.getDescription().length() > 90) {
-      Util.throwException(badRequestCode, "El campo descripción no puede superar 90 caracteres.");
-    }
+    validations(domainCategory);
 
     return categoryPersistencePort.saveCategory(domainCategory);
   }
@@ -52,8 +39,30 @@ public class CategoryUseCase implements CategoryServicePort {
   }
 
   @Override
-  public void saveCategoryInCategory(DomainCategory domainCategory) {
-    // Implementación si es necesaria
+  public Page<DomainCategory> getAll(Pageable pageable) {
+    return null;
   }
 
+  private void validField(String field, String messageMandatory) {
+    if (field == null || field.trim().isEmpty()) {
+      Util.throwException(messageMandatory);
+    }
+  }
+
+  private void validLimit(String field, int size, String messageLimit) {
+    if (field.length() > size) {
+      Util.throwException(String.format(messageLimit, size));
+    }
+  }
+
+  private void validations(DomainCategory domainCategory) {
+    Integer sizeName = Integer.valueOf(DomainEnum.SIZE_NAME.getMessage());
+    Integer sizeDescription = Integer.valueOf(DomainEnum.SIZE_DESCRIPTION_CATEGORY.getMessage());
+
+    validField(domainCategory.getName(), DomainEnum.NAME_MANDATORY.getMessage());
+    validField(domainCategory.getDescription(), DomainEnum.DESCRIPTION_MANDATORY.getMessage());
+    validLimit(domainCategory.getName(), sizeName, DomainEnum.NAME_LIMIT.getMessage());
+    validLimit(domainCategory.getDescription(), sizeDescription,
+        DomainEnum.DESCRIPTION_LIMIT.getMessage());
+  }
 }

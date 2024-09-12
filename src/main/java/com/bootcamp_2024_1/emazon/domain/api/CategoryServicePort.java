@@ -1,23 +1,19 @@
 package com.bootcamp_2024_1.emazon.domain.api;
 
+import com.bootcamp_2024_1.emazon.domain.exceptions.GlobalException;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.infrastructure.entity.CategoryEntity;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-/*
- * @utor Jeysson Gutiérrez
- * Esta interface define los contratos que los casos de uso deben cumplir,
- * describe que operaciones son posibles en el domain
- */
+
 public interface CategoryServicePort {
 
     //Operacion guardar category
-  DomainCategory saveCategory(DomainCategory domainCategory) throws IllegalAccessException;
+  DomainCategory saveCategory(DomainCategory domainCategory) throws GlobalException;
 
   DomainCategory findByName(String name);
 
-
-  void saveCategoryInCategory(DomainCategory domainCategory);
-
-
+  Page<DomainCategory> getAll(Pageable pageable);
 }

@@ -39,15 +39,13 @@ import static org.junit.jupiter.api.Assertions.*;
     // Arrange
     CategoryRequestDTO requestDTO = TestDataFactory.buildCategoryRequestDTO();
     DomainCategory domainCategory = TestDataFactory.buildDomainCategory();
-    CategoryResponseDTO responseDTO = TestDataFactory.builCategoryResponseDTO();
+    CategoryResponseDTO responseDTO = TestDataFactory.buildCategoryResponseDTO();
 
     Mockito.when(categoryRequestMapper.toModel(requestDTO)).thenReturn(domainCategory);
     Mockito.when(categoryResponseMapper.toDto(domainCategory)).thenReturn(responseDTO);
 
-    // Act
     CategoryResponseDTO result = categoryHandler.saveCategory(requestDTO);
 
-    // Assert
     assertNotNull(result);
     assertEquals(responseDTO, result);
     Mockito.verify(categoryServicePort).saveCategory(domainCategory);

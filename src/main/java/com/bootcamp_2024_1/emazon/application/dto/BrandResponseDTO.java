@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequestDTO {
-  private Long id;
-  private String name;
-  private String description;
+public class BrandResponseDTO {
+    private Long id;
+    private String name;
+    private String description;
 }

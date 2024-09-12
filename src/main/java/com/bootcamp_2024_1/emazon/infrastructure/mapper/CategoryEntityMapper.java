@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CategoryEntityMapper {
 
-  // Convertir de modelo de dominio a entidad de infraestructura
 
   CategoryEntity toEntity(DomainCategory domainCategory);
 

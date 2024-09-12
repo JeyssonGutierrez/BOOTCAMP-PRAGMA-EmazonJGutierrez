@@ -4,8 +4,12 @@ import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
 import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
 import com.bootcamp_2024_1.emazon.infrastructure.entity.CategoryEntity;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class TestDataFactory {
 
@@ -34,7 +38,7 @@ public class TestDataFactory {
     );
   }
 
-  public static CategoryRequestDTO buildCategoryRequestDTO() { // Cambia de "buil" a "build"
+  public static CategoryRequestDTO buildCategoryRequestDTO() {
     var category = new CategoryRequestDTO();
     category.setName("pintura");
     category.setDescription("test pintura");
@@ -42,7 +46,7 @@ public class TestDataFactory {
     return category;
   }
 
-  public static CategoryResponseDTO builCategoryResponseDTO() {
+  public static CategoryResponseDTO buildCategoryResponseDTO() {
 
     var category = new CategoryResponseDTO();
     category.setName("pintura");
@@ -51,5 +55,16 @@ public class TestDataFactory {
     return category;
   }
 
+  public static Page<CategoryEntity> buildCategoryEntityPage(int page, int size,
+      String sortDirection) {
+    Sort sort = sortDirection.equalsIgnoreCase("DESC") ? Sort.by("name").descending()
+        : Sort.by("name").ascending();
+    Pageable pageable = PageRequest.of(page, size, sort);
+    List<CategoryEntity> categoryEntities = buildCategoryEntityList();
+    return new PageImpl<>(categoryEntities, pageable, categoryEntities.size());
+  }
+
 }
+
+
 

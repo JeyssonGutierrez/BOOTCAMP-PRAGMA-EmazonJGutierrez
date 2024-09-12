@@ -1,23 +1,20 @@
 package com.bootcamp_2024_1.emazon.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class DomainCategory {
 
   private Long id;
   private String name;
   private String description;
-  private List<DomainCategory> subCategories;
 
-  public DomainCategory() {
-    this.subCategories = new ArrayList<>();
-  }
 
   public DomainCategory(Long id, String name, String description) {
     this.id = id;
     this.name = name;
     this.description = description;
+  }
+
+  public DomainCategory() {
   }
 
   public Long getId() {

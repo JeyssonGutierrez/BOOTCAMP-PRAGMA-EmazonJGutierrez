@@ -2,6 +2,7 @@ package com.bootcamp_2024_1.emazon.infrastructure.adapter.inbound;
 
 import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
 import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
+import com.bootcamp_2024_1.emazon.application.dto.PagedResponseDTO;
 import com.bootcamp_2024_1.emazon.application.handler.CategoryHandler;
 import com.bootcamp_2024_1.emazon.application.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,12 @@ public class CategoryController {
   @PostMapping(path = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CategoryResponseDTO> createCategory(
       @RequestBody CategoryRequestDTO categoryRequestDTO) {
-    try {
-      var response = categoryHandler.saveCategory(categoryRequestDTO);
-      return new ResponseEntity<>(response, HttpStatus.CREATED);
-    } catch (IllegalAccessException e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
+    var response = categoryHandler.saveCategory(categoryRequestDTO);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
-
   @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Page<CategoryResponseDTO> getCategories(
+  public PagedResponseDTO<CategoryResponseDTO> getCategories(
       @RequestParam(name = "page", required = true) int page,
       @RequestParam(name = "size", required = true) int size,
       @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction

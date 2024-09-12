@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class HandlerException {
-
+  //Cambiar var ResponseErrorDto
   @ExceptionHandler({GlobalException.class})
   public ResponseEntity<ResponseErrorDto> globalExceptionMethod(GlobalException ex) {
     log.error("{}", ex.getMessage(), ex);

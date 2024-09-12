@@ -2,19 +2,19 @@ package com.bootcamp_2024_1.emazon.application.handler;
 
 import com.bootcamp_2024_1.emazon.application.dto.CategoryRequestDTO;
 import com.bootcamp_2024_1.emazon.application.dto.CategoryResponseDTO;
+import com.bootcamp_2024_1.emazon.application.dto.PagedResponseDTO;
 import com.bootcamp_2024_1.emazon.application.mapper.CategoryRequestMapper;
 import com.bootcamp_2024_1.emazon.application.mapper.CategoryResponseMapper;
 import com.bootcamp_2024_1.emazon.domain.api.CategoryServicePort;
-import com.bootcamp_2024_1.emazon.domain.exceptions.GlobalException;
 import com.bootcamp_2024_1.emazon.domain.model.DomainCategory;
+import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,20 +28,29 @@ public class CategoryHandlerImpl implements CategoryHandler {
 
 
   @Override
-  public CategoryResponseDTO saveCategory(CategoryRequestDTO categoryRequestDTO)
-      throws IllegalAccessException {  // Añadimos la excepción aquí
+  public CategoryResponseDTO saveCategory(
+      CategoryRequestDTO categoryRequestDTO) {
     DomainCategory domainCategory = categoryRequestMapper.toModel(categoryRequestDTO);
-    categoryServicePort.saveCategory(domainCategory);  // Aquí se lanza la excepción
+    categoryServicePort.saveCategory(domainCategory);
     return categoryResponseMapper.toDto(domainCategory);
   }
 
   @Override
-  public List<CategoryResponseDTO> findAllCategories() throws GlobalException {
-    return List.of();
-  }
+  public PagedResponseDTO<CategoryResponseDTO> getAllCategories(Pageable pageable) {
 
-  @Override
-  public void saveCategoryInCategory(CategoryRequestDTO categoryRequestDTO) {
-  }
+    Page<DomainCategory> domainCategories = categoryServicePort.getAll(pageable);
 
+    List<CategoryResponseDTO> categoryDTOs = domainCategories
+        .getContent()
+        .stream()
+        .map(categoryResponseMapper::toDto)
+        .collect(Collectors.toList());
+
+    return new PagedResponseDTO<>(
+        categoryDTOs,
+        domainCategories.getTotalElements(),
+        domainCategories.getTotalPages(),
+        domainCategories.getSize()
+    );
+  }
 }
